@@ -25,6 +25,7 @@ import (
 	"github.com/pkg/errors"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/apimachinery/pkg/util/validation"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	"k8s.io/apimachinery/pkg/util/version"
 	"k8s.io/klog/v2"
@@ -108,6 +109,7 @@ func (*awsManagedControlPlaneWebhook) ValidateCreate(_ context.Context, obj runt
 	allErrs = append(allErrs, r.validateNetwork()...)
 	allErrs = append(allErrs, r.validatePrivateDNSHostnameTypeOnLaunch()...)
 	allErrs = append(allErrs, r.validateAccessConfigCreate()...)
+	allErrs = append(allErrs, r.validServiceAccountName()...)
 
 	if len(allErrs) == 0 {
 		return nil, nil
@@ -150,6 +152,7 @@ func (*awsManagedControlPlaneWebhook) ValidateUpdate(ctx context.Context, oldObj
 	allErrs = append(allErrs, r.validateKubeProxy()...)
 	allErrs = append(allErrs, r.Spec.AdditionalTags.Validate()...)
 	allErrs = append(allErrs, r.validatePrivateDNSHostnameTypeOnLaunch()...)
+	allErrs = append(allErrs, r.validServiceAccountName()...)
 
 	if r.Spec.Region != oldAWSManagedControlplane.Spec.Region {
 		allErrs = append(allErrs,
@@ -502,6 +505,28 @@ func validatePrivateDNSHostnameTypeOnLaunch(networkSpec infrav1.NetworkSpec, pat
 			privateDNSHostnameTypeOnLaunchPath, networkSpec.VPC.PrivateDNSHostnameTypeOnLaunch,
 			fmt.Sprintf("only %s HostnameType can be used in IPv6 mode", hostnameTypeResourceName),
 		))
+	}
+
+	return allErrs
+}
+
+func (r *AWSManagedControlPlane) validServiceAccountName() field.ErrorList {
+	var allErrs field.ErrorList
+
+	if r.Spec.PodIdentityAssociations != nil {
+		for i, association := range r.Spec.PodIdentityAssociations {
+			associationPath := field.NewPath("spec", "podIdentityAssociations").Index(i)
+			if association.ServiceAccountName == "" {
+				allErrs = append(allErrs, field.Required(associationPath.Child("serviceAccountName"), "serviceAccountName is required"))
+			}
+
+			// kubernetes uses ValidateServiceAccountName internally, which maps to IsDNS1123Subdomain
+			// https://github.com/kubernetes/apimachinery/blob/d794766488ac2892197a7cc8d0b4b46b0edbda80/pkg/api/validation/generic.go#L68
+
+			if validationErrs := validation.IsDNS1123Subdomain(association.ServiceAccountName); len(validationErrs) > 0 {
+				allErrs = append(allErrs, field.Invalid(associationPath.Child("serviceAccountName"), association.ServiceAccountName, fmt.Sprintf("serviceAccountName is invalid: %v", validationErrs)))
+			}
+		}
 	}
 
 	return allErrs
