@@ -1,0 +1,38 @@
+name: "build container image"
+
+on:
+  push:
+    branches:
+    - main
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Set up Go 1.x
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.24'
+      id: go
+    - name: Build binary
+      run: |
+        make managers
+    - name: 'Login to GitHub Container Registry'
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{github.actor}}
+        password: ${{secrets.GITHUB_TOKEN}}
+    - name: build container image
+      env:
+        REGISTRY: ghcr.io/absaoss
+        TAG: v2.9.3
+      run: |
+        make docker-build
+    - name: publish image
+      run: |
+        docker push ghcr.io/absaoss/cluster-api-aws-controller-amd64:v2.9.3
