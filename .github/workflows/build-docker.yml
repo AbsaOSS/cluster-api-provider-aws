@@ -30,9 +30,9 @@ jobs:
     - name: build container image
       env:
         REGISTRY: ghcr.io/absaoss
-        TAG: v2.7.3
+        TAG: v2.7.4
       run: |
         make docker-build
     - name: publish image
       run: |
-        docker push ghcr.io/absaoss/cluster-api-aws-controller-amd64:v2.7.3
+        docker push ghcr.io/absaoss/cluster-api-aws-controller-amd64:v2.7.4
