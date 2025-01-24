@@ -28,7 +28,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
-// SetupWebhookWithManager will setup the webhooks for the AWSManagedControlPlane.
+// SetupWebhookWithManager will setup the webhooks for the AWSManagedControlPlaneTemplate.
 func (rt *AWSManagedControlPlaneTemplate) SetupWebhookWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewWebhookManagedBy(mgr).
 		For(rt).

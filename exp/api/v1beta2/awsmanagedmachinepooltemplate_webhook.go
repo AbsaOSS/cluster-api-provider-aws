@@ -37,8 +37,8 @@ func (rt *AWSManagedMachinePoolTemplate) SetupWebhookWithManager(mgr ctrl.Manage
 // +kubebuilder:webhook:verbs=create;update,path=/validate-infrastructure-cluster-x-k8s-io-v1beta2-awsmanagedmachinepooltemplate,mutating=false,failurePolicy=fail,matchPolicy=Equivalent,groups=infrastructure.cluster.x-k8s.io,resources=awsmanagedmachinepooltemplates,versions=v1beta2,name=validation.awsmanagedmachinepooltemplate.infrastructure.cluster.x-k8s.io,sideEffects=None,admissionReviewVersions=v1;v1beta1
 // +kubebuilder:webhook:verbs=create;update,path=/mutate-infrastructure-cluster-x-k8s-io-v1beta2-awsmanagedmachinepooltemplate,mutating=true,failurePolicy=fail,matchPolicy=Equivalent,groups=infrastructure.cluster.x-k8s.io,resources=awsmanagedmachinepooltemplates,versions=v1beta2,name=default.awsmanagedmachinepooltemplate.infrastructure.cluster.x-k8s.io,sideEffects=None,admissionReviewVersions=v1;v1beta1
 
-var _ webhook.Defaulter = &AWSManagedMachinePool{}
-var _ webhook.Validator = &AWSManagedMachinePool{}
+var _ webhook.Defaulter = &AWSManagedMachinePoolTemplate{}
+var _ webhook.Validator = &AWSManagedMachinePoolTemplate{}
 
 // ValidateCreate will do any extra validation when creating a AWSManagedMachinePoolTemplate.
 func (rt *AWSManagedMachinePoolTemplate) ValidateCreate() (admission.Warnings, error) {
