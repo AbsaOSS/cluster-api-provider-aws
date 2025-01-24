@@ -26,7 +26,7 @@ type AWSManagedControlPlaneTemplateSpec struct {
 }
 
 // +kubebuilder:object:root=true
-// +kubebuilder:resource:path=awsmanagedcontroleplanetemplates,scope=Namespaced,categories=cluster-api,shortName=awsmcpt
+// +kubebuilder:resource:path=awsmanagedcontrolplanetemplates,scope=Namespaced,categories=cluster-api,shortName=awsmcpt
 // +kubebuilder:storageversion
 
 // AWSManagedControlPlaneTemplate is the Schema for AWSControlPlaneTemplate API
