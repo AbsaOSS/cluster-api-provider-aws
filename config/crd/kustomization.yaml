@@ -21,6 +21,7 @@ resources:
 - bases/controlplane.cluster.x-k8s.io_awsmanagedcontrolplanes.yaml
 - bases/controlplane.cluster.x-k8s.io_awsmanagedcontrolplanetemplates.yaml
 - bases/infrastructure.cluster.x-k8s.io_awsmanagedclusters.yaml
+- bases/infrastructure.cluster.x-k8s.io_awsmanagedclustertemplates.yaml
 - bases/bootstrap.cluster.x-k8s.io_eksconfigs.yaml
 - bases/bootstrap.cluster.x-k8s.io_eksconfigtemplates.yaml
 - bases/controlplane.cluster.x-k8s.io_rosacontrolplanes.yaml
