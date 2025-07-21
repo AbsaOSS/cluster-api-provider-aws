@@ -40,16 +40,16 @@ func (e *EKSAddon) IsEqual(other *EKSAddon, includeTags bool) bool {
 	if e == other {
 		return true
 	}
-	if !cmp.Equal(e.Version, other.Version) {
+	if !cmp.Equal(e.Version, other.Version) && *e.Version != "" {
 		return false
 	}
 	if !cmp.Equal(e.ServiceAccountRoleARN, other.ServiceAccountRoleARN) {
 		return false
 	}
-	if !cmp.Equal(e.Configuration, other.Configuration) {
+	if !cmp.Equal(e.Configuration, other.Configuration) && other.Configuration != nil {
 		return false
 	}
-	if !cmp.Equal(e.ResolveConflict, other.ResolveConflict) {
+	if !cmp.Equal(e.ResolveConflict, other.ResolveConflict) && other.ResolveConflict != nil {
 		return false
 	}
 

@@ -144,6 +144,7 @@ type Addon struct {
 	// +kubebuilder:validation:Required
 	Name string `json:"name"`
 	// Version is the version of the addon to use
+	// +optional
 	Version string `json:"version"`
 	// Configuration of the EKS addon
 	// +optional

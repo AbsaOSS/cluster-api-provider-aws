@@ -35,6 +35,7 @@ func TestEKSAddonPlan(t *testing.T) {
 	addonARN := "aws://someaddonarn"
 	addon1Name := "addon1"
 	addon1version := "1.0.0"
+	addon1versionNotSet := ""
 	addon1Upgrade := "2.0.0"
 	addonStatusActive := string(eks.AddonStatusActive)
 	addonStatusUpdating := string(eks.AddonStatusUpdating)
@@ -172,6 +173,20 @@ func TestEKSAddonPlan(t *testing.T) {
 			},
 			desiredAddons: []*EKSAddon{
 				createDesiredAddon(addon1Name, addon1version),
+			},
+			installedAddons: []*EKSAddon{
+				createInstalledAddon(addon1Name, addon1version, addonARN, addonStatusActive),
+			},
+			expectCreateError: false,
+			expectDoError:     false,
+		},
+		{
+			name: "1 installed and 1 desired - both same and installed active",
+			expect: func(m *mock_eksiface.MockEKSAPIMockRecorder) {
+				// No Action expected
+			},
+			desiredAddons: []*EKSAddon{
+				createDesiredAddon(addon1Name, addon1versionNotSet),
 			},
 			installedAddons: []*EKSAddon{
 				createInstalledAddon(addon1Name, addon1version, addonARN, addonStatusActive),
