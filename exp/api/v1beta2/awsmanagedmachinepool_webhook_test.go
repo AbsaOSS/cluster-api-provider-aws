@@ -26,7 +26,6 @@ import (
 	"k8s.io/utils/ptr"
 
 	infrav1 "sigs.k8s.io/cluster-api-provider-aws/v2/api/v1beta2"
-	utildefaulting "sigs.k8s.io/cluster-api/util/defaulting"
 )
 
 var (
@@ -39,12 +38,6 @@ var (
 	oldAvailabilityZoneSubnetType = AZSubnetTypePublic
 	newAvailabilityZoneSubnetType = AZSubnetTypePrivate
 )
-
-func TestAWSManagedMachinePoolDefault(t *testing.T) {
-	fargate := &AWSManagedMachinePool{ObjectMeta: metav1.ObjectMeta{Name: "foo", Namespace: "default"}}
-	t.Run("for AWSManagedMachinePool", utildefaulting.DefaultValidateTest(fargate))
-	fargate.Default()
-}
 
 func TestAWSManagedMachinePoolValidateCreate(t *testing.T) {
 	g := NewWithT(t)

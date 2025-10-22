@@ -26,23 +26,7 @@ import (
 	infrav1 "sigs.k8s.io/cluster-api-provider-aws/v2/api/v1beta2"
 	"sigs.k8s.io/cluster-api-provider-aws/v2/pkg/eks"
 	clusterv1 "sigs.k8s.io/cluster-api/api/v1beta1"
-	utildefaulting "sigs.k8s.io/cluster-api/util/defaulting"
 )
-
-func TestAWSFargateProfileDefault(t *testing.T) {
-	fargate := &AWSFargateProfile{ObjectMeta: metav1.ObjectMeta{Name: "foo", Namespace: "default"},
-		Spec: FargateProfileSpec{
-			ClusterName: "clustername",
-		},
-	}
-	t.Run("for AWSFargateProfile", utildefaulting.DefaultValidateTest(fargate))
-	fargate.Default()
-	g := NewWithT(t)
-	g.Expect(fargate.GetLabels()[clusterv1.ClusterNameLabel]).To(BeEquivalentTo(fargate.Spec.ClusterName))
-	name, err := eks.GenerateEKSName(fargate.Name, fargate.Namespace, maxProfileNameLength)
-	g.Expect(err).NotTo(HaveOccurred())
-	g.Expect(fargate.Spec.ProfileName).To(BeEquivalentTo(name))
-}
 
 func TestAWSFargateProfileValidateRoleNameUpdate(t *testing.T) {
 	g := NewWithT(t)

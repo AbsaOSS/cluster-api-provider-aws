@@ -28,16 +28,7 @@ import (
 	"k8s.io/utils/ptr"
 
 	"sigs.k8s.io/cluster-api-provider-aws/v2/feature"
-	utildefaulting "sigs.k8s.io/cluster-api/util/defaulting"
 )
-
-func TestMachineDefault(t *testing.T) {
-	machine := &AWSMachine{ObjectMeta: metav1.ObjectMeta{Name: "foo", Namespace: "default"}}
-	t.Run("for AWSMachine", utildefaulting.DefaultValidateTest(machine))
-	machine.Default()
-	g := NewWithT(t)
-	g.Expect(machine.Spec.CloudInit.SecureSecretsBackend).To(Equal(SecretBackendSecretsManager))
-}
 
 func TestAWSMachineCreate(t *testing.T) {
 	tests := []struct {

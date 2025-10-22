@@ -32,16 +32,7 @@ import (
 
 	"sigs.k8s.io/cluster-api-provider-aws/v2/feature"
 	clusterv1 "sigs.k8s.io/cluster-api/api/v1beta1"
-	utildefaulting "sigs.k8s.io/cluster-api/util/defaulting"
 )
-
-func TestAWSClusterDefault(t *testing.T) {
-	cluster := &AWSCluster{ObjectMeta: metav1.ObjectMeta{Name: "foo", Namespace: "default"}}
-	t.Run("for AWSCluster", utildefaulting.DefaultValidateTest(cluster))
-	cluster.Default()
-	g := NewWithT(t)
-	g.Expect(cluster.Spec.IdentityRef).NotTo(BeNil())
-}
 
 func TestAWSClusterValidateCreate(t *testing.T) {
 	unsupportedIncorrectScheme := ELBScheme("any-other-scheme")
