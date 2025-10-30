@@ -32,7 +32,8 @@ jobs:
         REGISTRY: ghcr.io/absaoss
         TAG: v2.9.3
       run: |
-        make docker-build
+        make docker-build-all
+        make docker-push-manifest
     - name: publish image
       run: |
         docker push ghcr.io/absaoss/cluster-api-aws-controller-amd64:v2.9.3
