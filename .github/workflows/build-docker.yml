@@ -30,7 +30,7 @@ jobs:
     - name: build container image
       env:
         REGISTRY: ghcr.io/absaoss
-        TAG: v2.9.3
+        TAG: v2.11.1
       run: |
         make docker-build-all
         make docker-push-all
